@@ -1,0 +1,35 @@
+{
+    "settings": [
+      "castle",
+      "forest",
+      "island",
+      "village",
+      "farm",
+      "ship",
+      "space",
+      "jungle",
+      "palace",
+      "cave",
+      "desert",
+      "lake",
+      "mountain",
+      "garden",
+      "circus",
+      "kingdom",
+      "planet",
+      "treehouse",
+      "underwater",
+      "school",
+      "city",
+      "market",
+      "factory",
+      "mine",
+      "temple",
+      "library",
+      "museum",
+      "tundra",
+      "swamp",
+      "meadow"
+    ]
+  }
+  

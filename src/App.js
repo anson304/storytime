@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { fetchCharacters, fetchSettings, generateStory } from './api';
+import { generateStory } from './api';
 // import './App.css';
 import StartPage from './components/StartPage';
 import CharacterPage from './components/CharacterPage';
 import SettingPage from './components/SettingPage';
 import StoryPage from './components/StoryPage';
 import LoadingSpinner from './components/LoadingSpinner';
+
+
+function getRandomSubset(arr, n) {
+  // Shuffle array using Fisher-Yates algorithm
+  const shuffled = arr.sort(() => 0.5 - Math.random());
+
+  // Get subset of `n` elements
+  return shuffled.slice(0, n);
+}
+
+const N_OPTIONS = 9;
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -17,27 +28,50 @@ function App() {
   const [chunks, setChunks] = useState([]);
   const [chunkImages, setChunkImages] = useState([]);
   const [currentChunk, setCurrentChunk] = useState(0);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [ideasLoading, setIdeasLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     async function loadIdeas() {
-      try {
-        const data = await fetchCharacters();
-        console.log(data); // This logs the JSON data
-        setCharacters(data.characters);
-      } catch (error) {
-        console.error("Error fetching ideas:", error);
-        setError("Failed to fetch characters. Please try again later.");
-      }
+      setIdeasLoading(true); // Set loading state to true
+      // try {
+      //   const data = await fetchCharacters();
+      //   console.log(data); // This logs the JSON data
+      //   setCharacters(data.characters);
+      // } catch (error) {
+      //   console.error("Error fetching ideas:", error);
+      //   setError("Failed to fetch characters. Please try again later.");
+      // }
+      fetch('/characters.json')
+      .then(response => response.json())
+      .then(json => {
+        setCharacters(getRandomSubset(json.characters,N_OPTIONS));
+        console.log("characters", json.characters); // Log inside the `then` block
+      })
+      .catch(error => {
+        console.error('Error fetching characters:', error);
+        // Handle error state if needed
+      })
+      // try {
+      //   const data = await fetchSettings();
+      //   console.log(data); // This logs the JSON data
+      //   setSettings(data.settings);
+      // } catch (error) {
+      //   console.error("Error fetching ideas:", error);
+      //   setError("Failed to fetch settings. Please try again later.");
+      // }
+      fetch('/settings.json')
+      .then(response => response.json())
+      .then(json => {
+        setSettings(getRandomSubset(json.settings,N_OPTIONS));
+        console.log("settings", json.settings); // Log inside the `then` block
+      })
+      .catch(error => {
+        console.error('Error fetching settings:', error);
+        // Handle error state if needed
+      })
 
-      try {
-        const data = await fetchSettings();
-        console.log(data); // This logs the JSON data
-        setSettings(data.settings);
-      } catch (error) {
-        console.error("Error fetching ideas:", error);
-        setError("Failed to fetch settings. Please try again later.");
-      }
+      setIdeasLoading(false); // Set loading state to false after fetching the ideas
     }
 
     loadIdeas();
@@ -99,7 +133,7 @@ function App() {
 
   return (
     <div className="App">
-      {page === 0 && <StartPage onNext={() => setPage(1)} />}
+      {page === 0 && <StartPage onNext={() => setPage(1)} ideasLoading={ideasLoading} />}
       {page === 1 && (
         <CharacterPage
           ideas={characters}

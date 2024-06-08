@@ -2,12 +2,12 @@
 import React from 'react';
 import './App.css';
 
-function StartPage({ onNext }) {
+function StartPage({ onNext, ideasLoading }) {
   return (
     <div className="start-page">
       <h1>STORY TIME</h1>
       <p>Build a story with new, fun words!</p>
-      <button onClick={onNext}>Start</button>
+      <button onClick={onNext} disabled = {ideasLoading}>Start</button>
     </div>
   );
 }
