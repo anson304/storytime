@@ -1,5 +1,6 @@
 // src/components/CharacterPage.js
 import React from 'react';
+import './App.css';
 
 function CharacterPage({ ideas, selectedIdeas, toggleIdea, onNext }) {
   return (

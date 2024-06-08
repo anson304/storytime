@@ -1,0 +1,134 @@
+/* src/App.css */
+
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* Fun, child-friendly font */
+  background-color: #f0f8ff; /* Light blue background for a friendly feel */
+  color: #333; /* Darker text for better readability */
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Header Styles */
+.App-header {
+  background-color: #00aeff; /* Blue header */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a lifted effect */
+}
+
+.App-header h1 {
+  font-size: 3em;
+  color: #ff4500; /* Orange color for the main title */
+}
+
+/* Start Page Styles */
+.start-page {
+  padding: 20px;
+}
+
+.start-page button {
+  background-color: #32cd32; /* Green button */
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.5em;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.start-page button:hover {
+  background-color: #228b22; /* Darker green on hover */
+}
+
+/* Character and Setting Page Styles */
+.ideas-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.idea-tile {
+  background-color: #ffffff;
+  padding: 15px;
+  border: 2px solid #00aeff; /* Blue border */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a lifted effect */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.idea-tile:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.idea-tile.selected {
+  background-color: #00aeff; /* Highlight selected tile */
+}
+
+/* Story Page Styles */
+.story-page {
+  background-color: #f0f8ff; /* Light blue background for a friendly feel */
+  color: #333; /* Darker text for better readability */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* Fun, child-friendly font */
+}
+
+.story-page h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #ff4500; /* Orange color for the title */
+}
+
+.story-chunk {
+  font-size: 1.5em;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #fff;
+  border: 2px solid #ffcc00; /* Yellow border */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a lifted effect */
+}
+
+.story-chunk img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.story-navigation {
+  margin-top: 20px;
+}
+
+.story-navigation button {
+  background-color: #ffcc00; /* Yellow buttons */
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  border-radius: 10px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.story-navigation button:hover {
+  background-color: #ffa500; /* Darker yellow on hover */
+}
+
+/* Error Message Styles */
+.error-message {
+  color: red;
+  font-size: 1.2em;
+  margin-top: 20px;
+}

@@ -1,5 +1,6 @@
 // src/components/StoryPage.js
 import React from 'react';
+import './App.css';
 
 function StoryPage({ title, chunks, currentChunk, onNextChunk, onPreviousChunk }) {
   return (

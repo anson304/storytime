@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCharacters, fetchSettings, generateStory } from './api';
-import './App.css';
+// import './App.css';
 import StartPage from './components/StartPage';
 import CharacterPage from './components/CharacterPage';
 import SettingPage from './components/SettingPage';

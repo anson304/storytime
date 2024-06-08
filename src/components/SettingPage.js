@@ -1,5 +1,6 @@
 // src/components/SettingPage.js
 import React from 'react';
+import './App.css';
 
 function SettingPage({ ideas, selectedIdeas, toggleIdea, onGenerateStory }) {
   return (

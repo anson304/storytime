@@ -56,7 +56,7 @@ app.get('/api/generate-story', async (req, res) => {
       return res.status(400).send("No ideas provided");
     }
 
-    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}. The title should be short and captivating. The story should be broken into digestible chunks. Return the title on the first line and the story in the following lines.`;
+    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}. The title should be short and captivating. The story should be broken into digestible chunks. Return the title on the first line and the story in the following lines. Remove markdown formatting.`;
     console.log("Generated Prompt:", prompt);
 
     const result = await model.generateContent(prompt);

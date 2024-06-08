@@ -1,5 +1,6 @@
 // src/components/StartPage.js
 import React from 'react';
+import './App.css';
 
 function StartPage({ onNext }) {
   return (
