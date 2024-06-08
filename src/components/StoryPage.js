@@ -22,9 +22,9 @@ function StoryPage({ title, chunks, currentChunk, onNextChunk, onPreviousChunk, 
         <div className="story-chunk">
           <p>{chunks[currentChunk]}</p>
         </div>
-        {currentChunk === chunks.length - 1 && (
-          <button onClick={onRestart}>Begin next story!</button>
-        )}
+          {currentChunk === chunks.length - 1 && (
+            <button className="restart-button" onClick={onRestart}>Begin next story!</button>
+          )}
       </div>
     </div>
   );

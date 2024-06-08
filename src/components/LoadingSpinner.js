@@ -6,7 +6,7 @@ function LoadingSpinner() {
   return (
     <div className="loading-spinner">
       <div className="spinner"></div>
-      <p>Loading...</p>
+      <p>Brewing up goodness...</p>
     </div>
   );
 }
