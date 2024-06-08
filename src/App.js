@@ -162,6 +162,15 @@ function App() {
       )}
       {page === 4 && <LoadingSpinner />}
       {error && <p className="error-message">{error}</p>}
+      <div className="jigsaw-badge">
+        <a href="https://jigsawstack.com/?ref=powered-by" rel="follow">
+        <img
+          src="https://jigsawstack.com/badge.svg"
+          alt="Powered by JigsawStack. The One API for your next big thing."
+          width={150}
+        />
+        </a>
+      </div>
     </div>
   );
 }

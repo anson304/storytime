@@ -27,6 +27,10 @@ body {
   color: #ff4500; /* Orange color for the main title */
 }
 
+.jigsaw-badge {
+  margin: 25px;
+}
+
 /* Start Page Styles */
 .start-page {
   padding: 20px;
@@ -69,6 +73,7 @@ body {
   transition: transform 0.3s ease;
   padding-top: 25%;
   padding-bottom: 25%;
+  font-size: 1.5em;
 }
 
 .idea-tile:hover {
