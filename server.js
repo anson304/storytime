@@ -3,6 +3,7 @@ const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const app = express();
 
+const { Buffer } = require("buffer");
 
 require('dotenv').config();
 
@@ -47,6 +48,7 @@ app.get('/api/generate-settings', async (req, res) => {
 
 
 app.get('/api/generate-story', async (req, res) => {
+  const endpoint = "https://api.jigsawstack.com/v1/ai/image_generation";
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   try {
     const selectedIdeas = req.query.selectedIdeas ? req.query.selectedIdeas.split(',') : [];
@@ -56,16 +58,47 @@ app.get('/api/generate-story', async (req, res) => {
       return res.status(400).send("No ideas provided");
     }
 
-    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}. The title should be short and captivating. The story should be broken into digestible chunks. Return the title on the first line and the story in the following lines.`;
+    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}. The title should be short and captivating. The story should be broken into digestible chunks. Return the title on the first line (without any formatting) and the story in the following lines.`;
     console.log("Generated Prompt:", prompt);
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = await response.text();
-    const [title, ...storyChunks] = text.split('\n\n'); // Assuming the title is separated by double newline
-    const story = storyChunks.join('\n\n');
 
-    res.json({ title, story });
+
+    [title, ...storyChunks] = text.split('\n\n'); // Assuming the title is separated by double newline
+    storyChunks = storyChunks.slice(0, 2);
+    chunkImages = [];
+    
+    for (const chunk of storyChunks) {
+      console.log(chunk);
+    
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.JIGSAW_API_KEY,
+        },
+        body: JSON.stringify({
+          prompt: chunk,
+          size: "small",
+          model: "dalle",
+        }),
+      };
+    
+      const response = await fetch(endpoint, options);
+      console.log(response);
+    
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const base64Image = buffer.toString('base64');
+      console.log(base64Image);
+    
+      chunkImages.push(`data:image/png;base64,${base64Image}`);
+    }
+    
+    res.json({ title, storyChunks, chunkImages });
+
   } catch (error) {
     console.error("Error generating story:", error);
     res.status(500).send("Error generating story");
