@@ -8,16 +8,6 @@ import StoryPage from './components/StoryPage';
 import LoadingSpinner from './components/LoadingSpinner';
 
 
-function getRandomSubset(arr, n) {
-  // Shuffle array using Fisher-Yates algorithm
-  const shuffled = arr.sort(() => 0.5 - Math.random());
-
-  // Get subset of `n` elements
-  return shuffled.slice(0, n);
-}
-
-const N_OPTIONS = 9;
-
 function App() {
   const [characters, setCharacters] = useState([]);
   const [settings, setSettings] = useState([]);
@@ -45,7 +35,7 @@ function App() {
       fetch('/characters.json')
       .then(response => response.json())
       .then(json => {
-        setCharacters(getRandomSubset(json.characters,N_OPTIONS));
+        setCharacters(json.characters);
         console.log("characters", json.characters); // Log inside the `then` block
       })
       .catch(error => {
@@ -63,7 +53,7 @@ function App() {
       fetch('/settings.json')
       .then(response => response.json())
       .then(json => {
-        setSettings(getRandomSubset(json.settings,N_OPTIONS));
+        setSettings(json.settings);
         console.log("settings", json.settings); // Log inside the `then` block
       })
       .catch(error => {
@@ -94,7 +84,7 @@ function App() {
     setPage(4); // Navigate to the loading screen
 
     if (selectedIdeas.length === 0) {
-      setError("Please select at least one idea.");
+      setError("Please select at least one location.");
       setLoading(false); 
       setPage(2); // Go back to the setting page
       return;
@@ -103,7 +93,8 @@ function App() {
     try {
       const data = await generateStory(selectedIdeas);
       setTitle(data.title);
-      setChunks(data.storyChunks); // Assuming chunks are separated by double newlines
+      // setChunks(data.storyChunks); // Assuming chunks are separated by double newlines
+      setChunks([...data.storyChunks, "End of story. Thank you for tuning in! - Erica and Anson."]);
       // get images for each chunk using jigsaw ai
       setChunkImages(data.chunkImages);
       console.log("chunkImages", data.chunkImages)
@@ -133,13 +124,23 @@ function App() {
 
   return (
     <div className="App">
-      {page === 0 && <StartPage onNext={() => setPage(1)} ideasLoading={ideasLoading} />}
+      {page === 0 && <StartPage onNext={() => {
+        setPage(1)
+      }
+      } ideasLoading={ideasLoading} />}
       {page === 1 && (
         <CharacterPage
           ideas={characters}
           selectedIdeas={selectedIdeas}
           toggleIdea={toggleIdea}
-          onNext={() => setPage(2)}
+          onNext={() => {
+            setError('');
+            if (selectedIdeas.length === 0) {
+              setError("Please select at least one character.");
+              return;
+            }
+            setPage(2)}
+          }
         />
       )}
       {page === 2 && (
@@ -158,6 +159,11 @@ function App() {
           onNextChunk={handleNextChunk}
           onPreviousChunk={handlePreviousChunk}
           chunkImages={chunkImages}
+          onRestart={() => {
+            setSelectedIdeas([])
+            setPage(1)
+          }
+          }
         />
       )}
       {page === 4 && <LoadingSpinner />}
