@@ -85,7 +85,7 @@ app.get('/api/generate-story', async (req, res) => {
         "x-api-key": process.env.JIGSAW_API_KEY,
       },
       body: JSON.stringify({
-        prompt: "generate an image of: " + chunkImagePrompt + "simple art style",
+        prompt: "generate an image of: " + chunkImagePrompt,
         size: "large",
         model: "dalle",
       }),
