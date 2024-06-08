@@ -45,11 +45,10 @@ app.get('/api/generate-settings', async (req, res) => {
   }
 });
 
-
-
 app.get('/api/generate-story', async (req, res) => {
   const endpoint = "https://api.jigsawstack.com/v1/ai/image_generation";
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
   try {
     const selectedIdeas = req.query.selectedIdeas ? req.query.selectedIdeas.split(',') : [];
     
@@ -65,14 +64,13 @@ app.get('/api/generate-story', async (req, res) => {
     const response = await result.response;
     const text = await response.text();
 
+    let [title, ...storyChunks] = text.split('\n\n'); // Assuming the title is separated by double newline
+    // storyChunks = storyChunks.slice(0, 2);
 
-    [title, ...storyChunks] = text.split('\n\n'); // Assuming the title is separated by double newline
-    storyChunks = storyChunks.slice(0, 2);
-    chunkImages = [];
-    
-    for (const chunk of storyChunks) {
-      console.log(chunk);
-    
+    // Prepare fetch requests for each story chunk
+    const fetchPromises = storyChunks.map(chunk => {
+      console.log("fetching chunk: ", chunk.slice(0, 20));
+
       const options = {
         method: "POST",
         headers: {
@@ -85,18 +83,18 @@ app.get('/api/generate-story', async (req, res) => {
           model: "dalle",
         }),
       };
-    
-      const response = await fetch(endpoint, options);
-      console.log(response);
-    
-      const arrayBuffer = await response.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const base64Image = buffer.toString('base64');
-      console.log(base64Image);
-    
-      chunkImages.push(`data:image/png;base64,${base64Image}`);
-    }
-    
+
+      return fetch(endpoint, options)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => {
+          const buffer = Buffer.from(arrayBuffer);
+          return `data:image/png;base64,${buffer.toString('base64')}`;
+        });
+    });
+
+    // Await all fetch promises concurrently
+    const chunkImages = await Promise.all(fetchPromises);
+    console.log("finished story");
     res.json({ title, storyChunks, chunkImages });
 
   } catch (error) {
@@ -104,6 +102,7 @@ app.get('/api/generate-story', async (req, res) => {
     res.status(500).send("Error generating story");
   }
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
