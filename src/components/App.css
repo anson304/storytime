@@ -12,6 +12,17 @@ body {
 .App {
   text-align: center;
   padding: 10px;
+  background: url('/public/background.png') no-repeat center center fixed; /* Add your background image here */
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure the background covers the entire height of the viewport */
+  text-align: center;
+  padding: 20px;
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* Fun, child-friendly font */
+  box-sizing: border-box;
 }
 
 /* Header Styles */
@@ -32,16 +43,25 @@ body {
 }
 
 /* Start Page Styles */
-.start-page {
-  padding: 20px;
+.start-page-title {
+  font-size: 4em;
+  align-items: center;
+  background: linear-gradient(to right, #ef5350, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.start-page-description {
+  font-size: 2em;
+  padding: 50px;
 }
 
 .start-page button {
   background-color: #32cd32; /* Green button */
   border: none;
-  padding: 15px 30px;
-  font-size: 1.5em;
-  border-radius: 10px;
+  padding: 15px 50px;
+  font-size: 2em;
+  border-radius: 30px;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -86,7 +106,7 @@ body {
 
 /* Story Page Styles */
 .story-page {
-  background-color: #f0f8ff; /* Light blue background for a friendly feel */
+  background-color: white;
   color: #333; /* Darker text for better readability */
   padding: 10px;
   border-radius: 10px;
@@ -192,8 +212,6 @@ body {
   background-color: #228b22; /* Darker green on hover */
 }
 
-/* src/components/LoadingSpinner.css */
-
 .loading-spinner {
   display: flex;
   justify-content: center;
@@ -201,7 +219,6 @@ body {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background-color: #f0f8ff; /* Light blue background for a friendly feel */
 }
 
 .spinner {

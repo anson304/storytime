@@ -5,8 +5,8 @@ import './App.css';
 function StartPage({ onNext, ideasLoading }) {
   return (
     <div className="start-page">
-      <h1>STORY TIME</h1>
-      <p>Build a story with new, fun words!</p>
+      <h1 className="start-page-title">STORY TIME</h1>
+      <p className="start-page-description">Build a story with fun and new words!</p>
       <button onClick={onNext} disabled = {ideasLoading}>Start</button>
     </div>
   );
