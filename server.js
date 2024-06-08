@@ -57,45 +57,52 @@ app.get('/api/generate-story', async (req, res) => {
       return res.status(400).send("No ideas provided");
     }
 
-    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}. The title should be short and captivating. The story should be broken into digestible chunks. Return the title on the first line and the story in the following lines. Remove markdown formatting.`;
+    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}`
+    + ` The title should be short and captivating. Remove markdown formatting.` 
+    + ` The story should be broken into digestible chunks, with each chunk containing a main idea.`
+    + ` Return the title on the first line and the story in the following lines`
+    + ` For each chunk, generate a prompt for a text to image AI`
+    + ` return the result in json format, use key 'title' for the title, 'storyChunks' for a list of story chunks and 'chunkImagePrompts' for a list of image prompts of the chunks.`
+    + ` return only the json result. no additional text.`;
     console.log("Generated Prompt:", prompt);
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = await response.text();
+    const textJson = JSON.parse(text);
+    console.log(textJson);
 
-    let [title, ...storyChunks] = text.split('\n\n'); // Assuming the title is separated by double newline
     // storyChunks = storyChunks.slice(0, 2);
-
+    
     // Prepare fetch requests for each story chunk
-    const fetchPromises = storyChunks.map(chunk => {
-      console.log("fetching chunk: ", chunk.slice(0, 20));
+   // Prepare fetch requests for each story chunk
+   const fetchPromises = textJson.chunkImagePrompts.map(chunkImagePrompt => {
+    console.log("fetching chunk: ", chunkImagePrompt.slice(0, 20));
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.JIGSAW_API_KEY,
+      },
+      body: JSON.stringify({
+        prompt: chunkImagePrompt + " cartoonish style. bright colours.",
+        size: "small",
+        model: "dalle",
+      }),
+    };
 
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.JIGSAW_API_KEY,
-        },
-        body: JSON.stringify({
-          prompt: chunk,
-          size: "small",
-          model: "dalle",
-        }),
-      };
-
-      return fetch(endpoint, options)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => {
-          const buffer = Buffer.from(arrayBuffer);
-          return `data:image/png;base64,${buffer.toString('base64')}`;
-        });
-    });
+    return fetch(endpoint, options)
+      .then(response => response.arrayBuffer())
+      .then(arrayBuffer => {
+        const buffer = Buffer.from(arrayBuffer);
+        return `data:image/png;base64,${buffer.toString('base64')}`;
+      });
+  });
 
     // Await all fetch promises concurrently
     const chunkImages = await Promise.all(fetchPromises);
     console.log("finished story");
-    res.json({ title, storyChunks, chunkImages });
+    res.json({ title: textJson.title, storyChunks: textJson.storyChunks, chunkImages });
 
   } catch (error) {
     console.error("Error generating story:", error);
