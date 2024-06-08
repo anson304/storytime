@@ -10,8 +10,8 @@ function StoryPage({ title, chunks, currentChunk, onNextChunk, onPreviousChunk }
         {chunks[currentChunk]}
       </div>
       <div className="story-navigation">
-        <button onClick={onPreviousChunk} disabled={currentChunk === 0}>Previous</button>
-        <button onClick={onNextChunk} disabled={currentChunk === chunks.length - 1}>Next</button>
+        <button onClick={onPreviousChunk} disabled={currentChunk === 0}>←</button>
+        <button onClick={onNextChunk} disabled={currentChunk === chunks.length - 1}>→</button>
       </div>
     </div>
   );

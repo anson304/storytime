@@ -17,7 +17,7 @@ function SettingPage({ ideas, selectedIdeas, toggleIdea, onGenerateStory }) {
           </div>
         ))}
       </div>
-      <button onClick={onGenerateStory}>To story</button>
+      <button onClick={onGenerateStory}>To story!</button>
     </div>
   );
 }

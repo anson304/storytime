@@ -5,6 +5,7 @@ import StartPage from './components/StartPage';
 import CharacterPage from './components/CharacterPage';
 import SettingPage from './components/SettingPage';
 import StoryPage from './components/StoryPage';
+import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -16,6 +17,7 @@ function App() {
   const [page, setPage] = useState(0);
   const [chunks, setChunks] = useState([]);
   const [currentChunk, setCurrentChunk] = useState(0);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   useEffect(() => {
     async function loadIdeas() {
@@ -55,9 +57,13 @@ function App() {
     setError(''); // Clear any previous error message
     setStory(''); // Clear the previous story
     setTitle(''); // Clear the previous title
+    setLoading(true); // Set loading state to true
+    setPage(4); // Navigate to the loading screen
 
     if (selectedIdeas.length === 0) {
       setError("Please select at least one idea.");
+      setLoading(false); 
+      setPage(2); // Go back to the setting page
       return;
     }
 
@@ -72,6 +78,9 @@ function App() {
     } catch (error) {
       console.error("Error generating story:", error);
       setError("Failed to generate story. Please try again later.");
+      setPage(2); // Go back to the setting page if there's an error
+    } finally {
+      setLoading(false); // Set loading state to false after generating the story
     }
   }
 
@@ -115,6 +124,7 @@ function App() {
           onPreviousChunk={handlePreviousChunk}
         />
       )}
+      {page === 4 && <LoadingSpinner />}
       {error && <p className="error-message">{error}</p>}
     </div>
   );
