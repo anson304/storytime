@@ -12,10 +12,10 @@ function App() {
   const [settings, setSettings] = useState([]);
   const [selectedIdeas, setSelectedIdeas] = useState([]);
   const [title, setTitle] = useState('');
-  const [story, setStory] = useState('');
   const [error, setError] = useState('');
   const [page, setPage] = useState(0);
   const [chunks, setChunks] = useState([]);
+  const [chunkImages, setChunkImages] = useState([]);
   const [currentChunk, setCurrentChunk] = useState(0);
   const [loading, setLoading] = useState(false); // Add loading state
 
@@ -55,7 +55,6 @@ function App() {
 
   async function handleGenerateStory() {
     setError(''); // Clear any previous error message
-    setStory(''); // Clear the previous story
     setTitle(''); // Clear the previous title
     setLoading(true); // Set loading state to true
     setPage(4); // Navigate to the loading screen
@@ -70,9 +69,11 @@ function App() {
     try {
       const data = await generateStory(selectedIdeas);
       setTitle(data.title);
-      setStory(data.story);
-      console.log(story)
-      setChunks(data.story.split('\n\n')); // Assuming chunks are separated by double newlines
+      setChunks(data.storyChunks); // Assuming chunks are separated by double newlines
+      // get images for each chunk using jigsaw ai
+      setChunkImages(data.chunkImages);
+      console.log("chunkImages", data.chunkImages)
+      
       setCurrentChunk(0);
       setPage(3); // Navigate to the story display page
     } catch (error) {
@@ -122,6 +123,7 @@ function App() {
           currentChunk={currentChunk}
           onNextChunk={handleNextChunk}
           onPreviousChunk={handlePreviousChunk}
+          chunkImages={chunkImages}
         />
       )}
       {page === 4 && <LoadingSpinner />}
