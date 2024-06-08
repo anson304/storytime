@@ -10,6 +10,7 @@ function App() {
   const [characters, setCharacters] = useState([]);
   const [settings, setSettings] = useState([]);
   const [selectedIdeas, setSelectedIdeas] = useState([]);
+  const [title, setTitle] = useState('');
   const [story, setStory] = useState('');
   const [error, setError] = useState('');
   const [page, setPage] = useState(0);
@@ -24,7 +25,7 @@ function App() {
         setCharacters(data.characters);
       } catch (error) {
         console.error("Error fetching ideas:", error);
-        setError("Failed to fetch story ideas. Please try again later.");
+        setError("Failed to fetch characters. Please try again later.");
       }
 
       try {
@@ -33,7 +34,7 @@ function App() {
         setSettings(data.settings);
       } catch (error) {
         console.error("Error fetching ideas:", error);
-        setError("Failed to fetch story ideas. Please try again later.");
+        setError("Failed to fetch settings. Please try again later.");
       }
     }
 
@@ -53,6 +54,7 @@ function App() {
   async function handleGenerateStory() {
     setError(''); // Clear any previous error message
     setStory(''); // Clear the previous story
+    setTitle(''); // Clear the previous title
 
     if (selectedIdeas.length === 0) {
       setError("Please select at least one idea.");
@@ -60,9 +62,11 @@ function App() {
     }
 
     try {
-      const text = await generateStory(selectedIdeas);
-      setStory(text);
-      setChunks(text.split('\n\n')); // Assuming chunks are separated by double newlines
+      const data = await generateStory(selectedIdeas);
+      setTitle(data.title);
+      setStory(data.story);
+      console.log(story)
+      setChunks(data.story.split('\n\n')); // Assuming chunks are separated by double newlines
       setCurrentChunk(0);
       setPage(3); // Navigate to the story display page
     } catch (error) {
@@ -104,6 +108,7 @@ function App() {
       )}
       {page === 3 && (
         <StoryPage
+          title={title}
           chunks={chunks}
           currentChunk={currentChunk}
           onNextChunk={handleNextChunk}

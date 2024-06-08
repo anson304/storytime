@@ -1,10 +1,10 @@
 // src/components/StoryPage.js
 import React from 'react';
 
-function StoryPage({ chunks, currentChunk, onNextChunk, onPreviousChunk }) {
+function StoryPage({ title, chunks, currentChunk, onNextChunk, onPreviousChunk }) {
   return (
     <div className="story-page">
-      <h2>Title of story</h2>
+      <h2>{title}</h2>
       <div className="story-chunk">
         {chunks[currentChunk]}
       </div>

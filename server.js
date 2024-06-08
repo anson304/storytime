@@ -44,5 +44,33 @@ app.get('/api/generate-settings', async (req, res) => {
   }
 });
 
+
+
+app.get('/api/generate-story', async (req, res) => {
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  try {
+    const selectedIdeas = req.query.selectedIdeas ? req.query.selectedIdeas.split(',') : [];
+    
+    if (!selectedIdeas.length) {
+      console.error("No ideas provided");
+      return res.status(400).send("No ideas provided");
+    }
+
+    const prompt = `Generate a title and a story for kids based on these ideas: ${selectedIdeas.join(', ')}. The title should be short and captivating. The story should be broken into digestible chunks. Return the title on the first line and the story in the following lines.`;
+    console.log("Generated Prompt:", prompt);
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+    const [title, ...storyChunks] = text.split('\n\n'); // Assuming the title is separated by double newline
+    const story = storyChunks.join('\n\n');
+
+    res.json({ title, story });
+  } catch (error) {
+    console.error("Error generating story:", error);
+    res.status(500).send("Error generating story");
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
