@@ -7,17 +7,19 @@ function StoryPage({ title, chunks, currentChunk, onNextChunk, onPreviousChunk, 
   return (
     <div className="story-page">
       <h2>{title}</h2>
-      <div className="story-chunk">
-        {chunks[currentChunk]}
-      </div>
-      <div className="story-image">
+      <div className="story-content">
+        <div className="story-chunk">
+          <p>{chunks[currentChunk]}</p>
+        </div>
         {currentImageUrl && (
-          <img src={currentImageUrl} alt={`Chunk ${currentChunk}`} width="200" />
+          <div className="story-image">
+            <img src={currentImageUrl} alt={`Chunk ${currentChunk}`}/>
+          </div>
         )}
-      </div>
-      <div className="story-navigation">
-        <button onClick={onPreviousChunk} disabled={currentChunk === 0}>←</button>
-        <button onClick={onNextChunk} disabled={currentChunk === chunks.length - 1}>→</button>
+        <div className="story-navigation">
+          <button onClick={onPreviousChunk} disabled={currentChunk === 0}>←</button>
+          <button onClick={onNextChunk} disabled={currentChunk === chunks.length - 1}>→</button>
+        </div>
       </div>
     </div>
   );
